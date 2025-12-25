@@ -49,24 +49,29 @@ Keeping the application healthy.
 ```Bash
 
 .
-├── 01-autoscaling/
-│   ├── hpa/
-│   ├── vpa/
-│   └── cluster-autoscaler/
-├── 02-storage/
+
+└── 01-probes/
+    └── startup probe/
+    └── liveness probe/
+    └── readiness probe/
+└── 02-resource management/
+    └── startup probe/
+├── 03-storage/
 │   ├── storage-classes/
 │   ├── persistent-volumes/
 │   └── statefulsets/
-├── 03-scheduling/
+├── 04-scheduling/
 │   ├── affinity-anti-affinity/
 │   ├── taints-tolerations/
 │   └── priority-classes/
-├── 04-workloads/
+├── 05-autoscaling/
+│   ├── hpa/
+│   ├── vpa/
+│   └── cluster-autoscaler/
+├── 05-workloads/
 │   ├── daemonsets/
 │   ├── jobs/
 │   └── cronjobs/
-└── 05-reliability/
-    └── probes-demo/
 ```
 
 # 🛠️ Prerequisites
@@ -93,4 +98,4 @@ Apply the manifest:
 
 kubectl apply -f .
 ```
-Author: Yoga setiawan | Links to my fundamental k8s repo: [https://github.com/yogasetiawan11/Kubernetes](here's the repo)
+Author: Yoga setiawan | Links to my fundamental k8s repo: [here's the repo](https://github.com/yogasetiawan11/Kubernetes)
