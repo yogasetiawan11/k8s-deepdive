@@ -2,39 +2,140 @@
 
 <img width="1400" height="733" alt="Image" src="https://github.com/user-attachments/assets/f1a8c808-8209-4787-a8af-b17936f0dc63" />
 
-A probe is a way for Kubernetes to check the health of a container.
+Kubernetes uses probes to determine the health and availability of a container running inside a Pod. Probes help Kubernetes decide when to restart a container, when to send traffic, or when to wait during startup.
 
-Kubernetes does not guess if your app is healthy. It asks the container using probes.
+There are three main probe mechanisms:
+- Exec Probe
 
-Think like this:
+- HTTP Probe
 
-> “Hey container, are you alive?”
-> “Are you ready to receive traffic?”
-> “Have you finished starting up?”
+- TCP Probe
 
-Each question is answered by a different probe.
+Each probe has different behavior and use cases.
+
+## Probing Mechanisms
+
+| Probe Type | Configuration Example | Success Condition | Failure Condition |
+|-----------|-----------------------|------------------|------------------|
+| **Exec** | `exec:`<br>`command:`<br>`- mongo`<br>`- --eval`<br>`- "db.adminCommand('ping')"` | Exit code `0` | Exit code `1` |
+| **HTTP** | `httpGet:`<br>`path: /health`<br>`port: 8080` | HTTP status `200–399` | Any status other than `200–399` |
+| **TCP** | `tcpSocket:`<br>`port: 8080` | Port accepts traffic | Port cannot accept traffic |
 
 # Why Probes Are Needed (Need for a Probe)
 
-## Without probes, Kubernetes has no idea if:
+In Kubernetes, a container running does not always mean healthy. An application can stay alive while being unresponsive, stuck, or unable to serve traffic. Probes exist to close this gap.
 
-- Your app is stuck
+Below are the core reasons probes are required, especially in production systems.
 
-- Your app is running but broken
+1. Containers Can Be Alive but Broken
 
-- Your app started but not ready
+A container may:
 
-- Your app needs restart
+- Start successfully
 
-## Problems without probes
+- Keep its process running
 
-- Users get errors even though Pod is Running
+- Still fail internally
 
-- Traffic sent to broken containers
+Examples:
 
-- Pods never restart when app hangs
+- Application thread deadlock
 
-- Slow-starting apps get killed too early
+- Database connection pool exhausted
+
+- Memory leak causing extreme latency
+
+- Without probes, Kubernetes assumes everything is fine.
+
+Probes give Kubernetes real application-level feedback.
+
+2. Automatic Self-Healing
+
+Probes enable Kubernetes to take action automatically. Depending on probe type:
+
+- Restart the container (Liveness)
+
+- Stop sending traffic (Readiness)
+
+- Wait before marking container ready (Startup)
+
+This removes the need for:
+
+- Manual restarts
+
+- Human intervention during failures
+
+- Result: self-healing infrastructure.
+
+3. Prevent Sending Traffic to Unhealthy Pods
+
+Without readiness probes:
+
+- Service continues routing traffic
+
+- Users hit failing instances
+
+With readiness probes:
+
+- Unready pods are removed from Service endpoints
+
+- Healthy pods continue serving traffic
+
+This is critical for:
+
+- Zero-downtime deployments
+
+- High availability systems
+
+4. Safe Application Startup Handling
+
+Some applications:
+
+- Need warm-up time
+
+- Load large models
+
+- Run database migrations
+
+Without probes:
+
+- Kubernetes may restart the container too early
+
+Startup probes tell Kubernetes:
+
+- “The app is not ready yet, but it is still starting.”
+
+- This prevents restart loops during initialization.
+
+5. Enable Rolling Updates Without Downtime
+
+During rolling deployments:
+
+- Old pods terminate
+
+- New pods start gradually
+
+Probes ensure:
+
+- Traffic goes only to ready pods
+
+- New pods receive traffic only after fully initialized
+
+- This makes rolling updates safe and predictable.
+
+6. Better Observability and Debugging
+
+Probe failures provide:
+
+- Clear signals in Pod events
+
+- Actionable logs
+
+- Metrics for monitoring systems
+
+> Instead of: “The app is slow sometimes”
+
+>You get: “Readiness probe failed due to dependency timeout”
 
 ## What probes solve
 
@@ -48,14 +149,6 @@ Each question is answered by a different probe.
 
 👉 Probes turn Kubernetes from “container runner” into “self-healing platform.”
 
-# Types of Probes in Kubernetes
-
-Kubernetes has 3 probe types:
-
-- Probe Type	Purpose
-- Liveness	Is the app still alive?
-- Readiness	Can the app receive traffic?
-- Startup	Has the app finished starting?
 
 
 # Liveness Probe
