@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: exam-pods-binding   # Name of the RoleBinding
+  namespace: default
+subjects:   # Define Who gets the permissions
+- kind: User
+  name: yoga # The user's name that we created previously
+  apiGroup: rbac.authorization.k8s.io
+roleRef: # What permissions are granted
+  kind: Role # This is a Role (but could also be a ClusterRole)
+  name: pod-reader # Name of the role that we just created (must exist in the same namespace or be a ClusterRole)
+  apiGroup: rbac.authorization.k8s.io
