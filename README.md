@@ -49,7 +49,7 @@ Keeping the application healthy.
 ```Bash
 
 .
-
+ []
 └── 01-probes/
     └── startup probe/
     └── liveness probe/
