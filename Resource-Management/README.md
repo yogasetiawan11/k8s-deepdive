@@ -54,3 +54,21 @@ These pods are guaranteed to receive their requested resources and are the last 
 - **Burstable:**
 Assigned when requests and limits are defined, but they are not equal, or when only requests are defined.
 These pods are killed after Best Effort pods but before Guaranteed pods in a resource-constrained scenario.
+
+
+## **Limit Range**
+ LimitRange as a Kubernetes resource that allows administrators to control resource usage at the namespace level. It enables setting minimum, maximum, and default resource values for pods and containers within a specific namespace.
+
+Here's how LimitRange works:
+
+- Defining Constraints:
+ You can specify minimum and maximum CPU and memory limits for pods and containers.
+ For example, the video demonstrates setting a minimum CPU of 50 millicores and a minimum memory of 5 MB. If a pod requests less than the minimum or more than the maximum defined in the LimitRange, the pod creation will be rejected.
+
+- Setting Defaults:
+ If a pod definition does not specify requests or limits, the LimitRange can automatically apply default values.
+
+- Limit-Request Ratio:
+ You can also define a maximum ratio between the CPU/memory limit and request for a container, ensuring that limits are not disproportionately higher than requests.
+- Persistent Volume Claim Limits:
+ LimitRange can also be used to define storage claim limits for Persistent Volume Claims (PVCs)
