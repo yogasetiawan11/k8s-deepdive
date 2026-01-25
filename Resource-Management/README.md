@@ -72,3 +72,20 @@ Here's how LimitRange works:
  You can also define a maximum ratio between the CPU/memory limit and request for a container, ensuring that limits are not disproportionately higher than requests.
 - Persistent Volume Claim Limits:
  LimitRange can also be used to define storage claim limits for Persistent Volume Claims (PVCs)
+
+## **Resource Quota**
+ResourceQuota is a Kubernetes resource used to restrict resource consumption at the namespace level, rather than at the individual pod or container level .
+
+Here's what ResourceQuota allows you to limit within a namespace:
+
+- **Total CPU and Memory Requests/Limits**:
+You can set a maximum total CPU and memory that all pods in a given namespace can request or limit. For example, [the video](Resource-Quota.yaml) shows a ResourceQuota limiting total CPU to 2000 millicores and total memory to 8 GB for the namespace.
+
+- **Number of Objects**: It can also limit the number of specific Kubernetes objects that can be created in a namespace, such as:
+- Pods 
+- Services
+- Deployments
+- Replication Controllers
+
+- **Storage Claims**:
+ ResourceQuota can restrict how much storage Persistent Volume Claims (PVCs) can claim within a namespace, potentially based on storage classes.
