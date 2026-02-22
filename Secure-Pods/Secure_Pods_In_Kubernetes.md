@@ -3,12 +3,16 @@
 ## **Running as Root**:
 By default, containers run as the root user, which grants the highest privileges in the operating system. If a pod is compromised while running as root, an attacker can perform actions like installing utilities (e.g., curl), downloading malware (e.g., crypto miners), and setting up backdoor SSH access, potentially without detection.
 Even if a container doesn't run as root, if tools like curl are already present in the base Docker image, an attacker can still use them to carry out malicious activities .
+
 ## **Privilege Escalation**:
 Linux systems allow users to temporarily elevate their privileges (e.g., using sudo) to perform administrative functions. If this capability is not restricted in a container, an attacker could exploit it to gain more control.
+
 ## **Remote Code Execution (RCE) Vulnerabilities**:
 These vulnerabilities allow an attacker to execute malicious code within the pod. Even with other security measures, an RCE can enable an attacker to install malicious software, create backdoors, or manipulate the file system.
+
 ## **Writable File System**:
 If a container has a writable root file system, an attacker who gains access can write malicious files, install tools, set up crypto miners, and create backdoors.
+
 ## **Linux Capabilities**:
 Linux operating systems have broad capabilities, including setting machine time or interacting with hardware. If non-essential capabilities are not dropped, attackers can exploit these to stage attacks from within the container.
 

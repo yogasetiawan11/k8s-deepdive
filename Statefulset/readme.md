@@ -1,16 +1,19 @@
-In the world of Kubernetes, most applications (like web servers or APIs) are stateless—they don't care which pod they are running on, and if one dies, a new one takes its place with no memory of the past.
+# The difference between statefulSet and Stateless
+## Stateful Applications
 
-However, databases (PostgreSQL, MongoDB) and distributed systems (Kafka, ZooKeeper) are stateful. They require a persistent identity.
+Stateful applications store the state of the current request, and subsequent requests depend on the state of previous ones.
 
-# What is a StatefulSet?
-A StatefulSet is the Kubernetes workload object used to manage stateful applications. Unlike a Deployment, a StatefulSet maintains a sticky identity for each of its Pods. These pods are created from the same spec but are not interchangeable; each has a persistent identifier that it maintains across any rescheduling.
+An example is a simple Spring Boot application where an authentication flag is stored in memory. If multiple instances are running and a user is authenticated on one instance, another instance will not have that authentication flag set in memory. This can lead to inconsistent or incorrect results.
 
-# Why do we need it?
-Stable, Unique Network Identifiers: Pods are named hostname-0, hostname-1, etc. If db-0 crashes, it restarts as db-0.
+Databases are considered stateful applications because they store and maintain data over time.
 
-Stable, Persistent Storage: Each Pod gets its own Dedicated Persistent Volume (PV). If the Pod moves to a different node, the storage follows it.
+## Stateless Applications
 
-Ordered Deployment/Scaling: Pods are created and terminated in a strict order (e.g., 0, then 1, then 2). This is critical for database clusters where a "Primary" must exist before "Secondaries."
+Stateless applications do not store any state internally.
+
+Instead, the state is typically moved to an external system such as a database.
+
+An example is a Spring Boot application that generates and validates a token stored in a database for subsequent requests. Because the authentication state is stored externally, any instance of the application can validate the request, ensuring consistent results regardless of how many instances are running.
 
 # Example
 Kubernetes StatefulSet Demo (PostgreSQL)
