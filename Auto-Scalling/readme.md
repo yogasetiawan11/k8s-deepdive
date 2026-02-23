@@ -30,4 +30,4 @@ then apply this [VPA file](Auto-Scalling/VPA.yaml)
 
 
 # Cluster Autoscaller
-CA add the node to the cluster If there are any pods that stuck in pending state because lack of resources in the cluster. Not only scalling up these 3 Auto Scaller can also scalling down also.
+CA add the node to the cluster If there are any pods that stuck in pending state because lack of resources in the cluster. Not only scalling up these 3 Auto Scaller can scalling down also.
