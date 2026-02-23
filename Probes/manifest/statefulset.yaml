@@ -16,16 +16,17 @@ spec:
       containers:
         - name: mongo
           image: mongo:4.0.8
-          startupProbe:
+          startupProbe:   # Here we create starupProbe with exec comand
             exec:
               command:
                 - mongo
                 - --eval
                 - "db.adminCommand('ping')"
-            initialDelaySeconds: 1
-            periodSeconds: 10
-            timeoutSeconds: 5
-            successThreshold: 1
+            # Below is probe costumisation which you can modify 
+            initialDelaySeconds: 1  # Delay to run the probe intially
+            periodSeconds: 10  # How frequently probe should execute after initial delay
+            timeoutSeconds: 5  # Timeout period to mark as failure
+            successThreshold: 1  # Both of success and failure indicates how many times to retry in case of failure
             failureThreshold: 2
           livenessProbe:
             exec:
