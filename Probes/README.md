@@ -93,6 +93,17 @@ Probe failures provide:
 # Liveness Probe
 This probe instructs Kubernetes on how to detect if a pod is live or healthy. If the liveness probe fails, Kubernetes assumes the pod is unhealthy and restarts it.
 
+example of liveness probe:
+
+```yaml
+          livenessProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - "db.adminCommand('ping')"
+```
+
 ## Why Liveness Probe is needed
 Kubernetes, by default, only checks the main process of a container to determine its health. If the internal functionality is broken, Kubernetes won't restart the pod, making the service unstable and difficult to debug. Probes allow you to customize  how Kubernetes investigates the health of pods.
 
@@ -119,6 +130,15 @@ An app may be running but:
 - Overloaded
 - Temporarily unhealthy
 
+example of readiness probe
+```yaml
+          readinessProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - "db.adminCommand('ping')"
+```
 ## Without readiness probe:
 - Traffic goes to unready pods
 - Users get errors
@@ -133,6 +153,15 @@ Startup Probe checks whether the application has finished starting. While startu
 - Liveness probe is disabled
 - Readiness probe is disabled
 
+Example of startup probe:
+```yaml
+          livenessProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - "db.adminCommand('ping')"
+```
 ## Why Startup Probe is needed
 Some apps start very slowly like:
 - Java applications
@@ -144,3 +173,4 @@ Some apps start very slowly like:
 - Liveness probe runs too early
 - App gets restarted again and again
 - Pod enters CrashLoopBackOff
+
