@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-ui
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: todo-ui
+  template:
+    metadata:
+      name: todo-ui-pod
+      labels:
+        app: todo-ui
+    spec:
+      # below is a Node that I have in the cluser, you can specify any node name that you have in your cluster to run the pod on that specific node
+      nodeName: minikube-m02   # Here we specify the node name to run the pod on specific node
+      containers:
+        - name: todo-ui
+          image: yogas4/todo-ui:1.0.2
+          ports:
+            - containerPort: 80
+          env:
+            - name: "REACT_APP_BACKEND_SERVER_URL"
+              value: "http://todo.com/api"
