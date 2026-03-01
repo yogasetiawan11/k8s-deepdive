@@ -63,3 +63,31 @@ This option acts similarly to nodeSelector but with the added power of affinity 
 Behavior: It forces the scheduler to only place the pod on a node that exactly matches the specified label.
 
 Failure State: If no such node is found, the pod will remain in an unschedulable (Pending) state until a matching node becomes available.
+
+# Pod Affinity and Anti-Affinity
+Kubernetes Pod Affinity and Anti-Affinity
+Pod Affinity is a scheduling strategy used to collocate pods within the same region or availability zone. This is particularly beneficial for applications that frequently communicate, as it significantly reduces network latency.
+
+How Pod Affinity Works
+To implement this, you define a label selector (to identify the target pods) and a topology key (to define the scope, such as a node, zone, or region).
+
+Label Matching: The Kubernetes scheduler searches for existing pods that match the defined label selector.
+
+Topology Identification: Once found, the scheduler identifies the value of the topology key on the node where those pods are running.
+
+Placement: The scheduler places the new pod onto a node that shares that same topology key value.
+
+Example Scenarios
+Regional Collocation: If a "To-Do UI" application is deployed in the US-East-1 region, Pod Affinity ensures the "To-Do API" is also deployed within US-East-1.
+
+Hard Rules: You can set strict requirements (RequiredDuringScheduling) where, for example, an API pod must be deployed on the exact same host as the UI pod by using the hostname as the topology key.
+
+## Pod Anti-Affinity
+In contrast, Pod Anti-Affinity is used to keep pods away from each other. This forces the scheduler to spread replicas across different nodes, availability zones, or regions.
+
+Failure Domain Protection: By ensuring pods are not concentrated on a single machine, you prevent a complete service outage if a specific node or rack fails.
+
+High Availability: This is the standard practice for ensuring that your application remains reachable even during localized infrastructure issues Here an example of [podAffinity](podAffinity.yaml).
+
+# Taints and Tolerations
+While Affinity attracts pods to nodes, Taints allow a node to repel pods. Tolerations are applied to pods to allow them to "ignore" a taint.
