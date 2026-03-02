@@ -90,4 +90,28 @@ Failure Domain Protection: By ensuring pods are not concentrated on a single mac
 High Availability: This is the standard practice for ensuring that your application remains reachable even during localized infrastructure issues Here an example of [podAffinity](podAffinity.yaml).
 
 # Taints and Tolerations
-While Affinity attracts pods to nodes, Taints allow a node to repel pods. Tolerations are applied to pods to allow them to "ignore" a taint.
+Taints and Tolerations: Controlling Pod Scheduling
+Taints and Tolerations are key mechanisms used to control pod scheduling on Kubernetes nodes. Taints are applied to nodes to repel certain pods, essentially making the node unschedulable unless a pod has a matching toleration.
+
+A common use case for tainting a node is during upgrades or maintenance the Kubernetes cluster, where you want to prevent new pods from being scheduled on that node while you perform operations like draining pods or bringing the node down.
+
+Types of Taints
+There are three popular types of taints used to manage node behavior:
+
+NoSchedule: This makes the node completely unschedulable for pods that do not have a matching toleration.
+
+NoExecute: This is a more aggressive taint. When applied, all pods currently running on the node that do not tolerate this taint will be immediately evicted.
+
+PreferNoSchedule: This type of taint suggests that the scheduler should avoid scheduling pods on the node if possible, but it will still schedule them there if no other suitable nodes are available. This is useful for nodes with performance issues where you prefer not to schedule pods, but it is not a strict requirement.
+
+Tolerations as the Exception
+Tolerations are applied to pods and allow them to schedule onto nodes that have matching taints. They act as an exception to the rule. Even if a node has a "NoSchedule" taint, a pod with a toleration matching that taint’s key-value pair and effect can still be scheduled on it.
+
+For example, high priority or production critical pods might have tolerations to ensure they can run even on tainted nodes.
+
+Implementation
+To apply a taint to a node, you can use the following command:
+```sh
+kubectl taint node [node-name] key1=value1:NoSchedule
+```
+To allow a pod to be scheduled on that node, you must add a toleration to the pod's YAML definition matching the specific key, value, and effect of the taint.
